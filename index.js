@@ -16,7 +16,8 @@ app.get('/', (req, res) => {
 app.post('/signup', (req,res) => {
     newUser = req.body;
     User.create(newUser)
-    .then(user => res.status(201).json(user))
+    .then(user => 
+      res.status(201).json(user))
     .catch(err => res.status(500).json(err));
 });
 
@@ -26,11 +27,9 @@ app.post('/signin',(req,res) => {
       email:req.body.email
     }
   }).then(async user => {
-
     if(user[0]){
-      valid = await encrypt.validPassword(req.body.password,user[0].password);
-      console.log(valid);
-      if(valid){
+      isValid = await encrypt.validPassword(req.body.password,user[0].password);
+      if(isValid){
         return res.status(200).json(user[0]);
       }
     }
@@ -38,9 +37,12 @@ app.post('/signin',(req,res) => {
   }).catch(err => res.status(500).json(err));
 });
 
-app.get('/search', (req,res) => {
+app.get('/search/:id', (req,res) => {
   console.log("searching for users...");
   User.findAll({
+    where: {
+      id:req.params.id
+    },
     include:  ['Telefones']
 })
   .then(user => res.send({user}))
