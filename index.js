@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const {User} = require('./models/index');
-const encrypt = require('./util/encrypt')
+const encrypt = require('./util/encrypt');
+const auth = require('./util/auth');
 
 port = process.env.port || 3000;
 
@@ -13,24 +14,33 @@ app.get('/', (req, res) => {
   res.send('version 1.0.0');
 });
 
-app.post('/signup', (req,res) => {
+app.post('/signup',  (req,res) => {
     newUser = req.body;
     User.create(newUser)
-    .then(user => 
-      res.status(201).json(user))
+    .then(async user => {
+      token = await auth.generateAuthToken(user.id);
+        user.token = token;
+        user.save();
+        res.setHeader('Bearer',token);
+      res.status(201).json(user);
+    })
     .catch(err => res.status(500).json(err));
 });
 
 app.post('/signin',(req,res) => {
-  User.findAll({
+  User.findOne({
     where: {
       email:req.body.email
     }
   }).then(async user => {
-    if(user[0]){
-      isValid = await encrypt.validPassword(req.body.password,user[0].password);
+    if(user){
+      isValid = await encrypt.validPassword(req.body.password,user.password);
       if(isValid){
-        return res.status(200).json(user[0]);
+        token = await auth.generateAuthToken(user.id);
+        user.token = token;
+        user.save();
+        res.setHeader('Bearer',token);
+        return res.status(200).json(user);
       }
     }
     return res.status(401).json("Usuário e/ou senha inválidos")
@@ -38,15 +48,20 @@ app.post('/signin',(req,res) => {
 });
 
 app.get('/search/:id', (req,res) => {
-  console.log("searching for users...");
-  User.findAll({
+  
+  var token = req.headers['bearer'];
+  if (!token) return res.status(401).send('Não autorizado');
+
+  auth.verify(req,res,token)
+
+  User.findOne({
     where: {
       id:req.params.id
     },
     include:  ['Telefones']
 })
-  .then(user => res.send({user}))
-  .catch(err => res.send({error:err}));
+  .then(user => res.status(200).send(user))
+  .catch(err => res.status(500).send({error:err}));
 });
 
 app.listen(port);
