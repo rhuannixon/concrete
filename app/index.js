@@ -4,8 +4,22 @@ const app = express();
 const {User} = require('./models/index');
 const encrypt = require('./util/encrypt');
 const auth = require('./util/auth');
+require('dotenv/config');
+const mysql = require('mysql2');
+const config = require('../config/config.json')
 
 port = process.env.port || 3000;
+console.log('connecting on database.')
+const conn = mysql.createConnection({
+    "user": process.env.DB_USERNAME,
+    "password": process.env.DB_PASSWORD,
+    "database": "database_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+})
+conn.connect(err => {
+  !err ? console.log('connection success!') : console.log(`Failed to connect: ${err}`)
+})
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -65,4 +79,4 @@ app.get('/search/:id', (req,res) => {
 });
 
 app.listen(port);
-console.log(`starting server on port: ${port}`);
+console.log('starting server...');
