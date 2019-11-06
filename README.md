@@ -1,20 +1,4 @@
 # concrete
-Criação de cadastro (Sign up)
-
-· Este endpoint deverá receber um usuário com os seguintes campos: nome, email, senha e uma lista de objetos telefone. Seguem os modelos:
-
-{
-  "nome": "string",
-  "email": "string",
-  "senha": "senha",
-  "telefones": [
-    {
-      "numero": "123456789",
-      "ddd": "11"
-    }
-  ]
-}
-
 · Usar status codes de acordo
 · Em caso de sucesso irá retornar um usuário mais os campos:
 ·· id: id do usuário (pode ser o próprio gerado pelo banco, porém seria interessante se fosse um GUID)
@@ -52,7 +36,15 @@ Criação de cadastro (Sign up)
 · Testes unitários
 · Criptogafia não reversível (hash) na senha e no token
 
-## Submissão
-· O desafio deve ser entregue pelo GitHub. 
-· A aplicação deve estar hospedada (Heroku, Google Cloud, AWS, ou serviço similar) 
-· As URLs devem ser enviadas por e-mail.
+
+# PENDENTE
+
+PERSISTIR TELEFONE
+TESTES UNITARIOS
+BUILD
+TRATAR MSG DE RETORNO DE ERROS
+
+# Comandos Úteis:
+
+## run migrations remotly on production
+- npx sequelize-cli db:migrate --url <database_url>
