@@ -9,7 +9,7 @@ const mysql = require('mysql2');
 const config = require('../config/config.json')
 
 port = process.env.port || 3000;
-console.log('connecting on database.')
+/*console.log('connecting on database.')
 const conn = mysql.createConnection({
     "user": process.env.DB_USERNAME,
     "password": process.env.DB_PASSWORD,
@@ -19,7 +19,7 @@ const conn = mysql.createConnection({
 })
 conn.connect(err => {
   !err ? console.log('connection success!') : console.log(`Failed to connect: ${err}`)
-})
+})*/
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
