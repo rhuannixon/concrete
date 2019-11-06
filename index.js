@@ -8,7 +8,7 @@ require('dotenv/config');
 const mysql = require('mysql2');
 const config = require('./config/config.json')
 
-port = process.env.port || 3000;
+port = process.env.port;
 /*console.log('connecting on database.')
 const conn = mysql.createConnection({
     "user": process.env.DB_USERNAME,
