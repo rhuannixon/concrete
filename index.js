@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const {User} = require('./models/index');
-const encrypt = require('./util/encrypt');
-const auth = require('./util/auth');
+const {User} = require('./app/models/index');
+const encrypt = require('./app/util/encrypt');
+const auth = require('./app/util/auth');
 require('dotenv/config');
 const mysql = require('mysql2');
-const config = require('../config/config.json')
+const config = require('./config/config.json')
 
 port = process.env.port || 3000;
 /*console.log('connecting on database.')
