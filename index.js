@@ -1,25 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const {User} = require('./app/models/index');
+const {User,Telefone} = require('./app/models/index');
 const encrypt = require('./app/util/encrypt');
 const auth = require('./app/util/auth');
-require('dotenv/config');
 const mysql = require('mysql2');
 const config = require('./config/config.json')
 
-port = process.env.PORT;
-/*console.log('connecting on database.')
-const conn = mysql.createConnection({
-    "user": process.env.DB_USERNAME,
-    "password": process.env.DB_PASSWORD,
-    "database": "database_development",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-})
-conn.connect(err => {
-  !err ? console.log('connection success!') : console.log(`Failed to connect: ${err}`)
-})*/
+port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -28,19 +16,26 @@ app.get('/', (req, res) => {
   res.send('version 1.0.0');
 });
 
+//---------------------signup------------------------\\
 app.post('/signup',  (req,res) => {
     newUser = req.body;
     User.create(newUser)
     .then(async user => {
       token = await auth.generateAuthToken(user.id);
         user.token = token;
+        for(var i = 0;i < newUser.telefones.length;i++){
+          Telefone.create(newUser.telefones[i])
+          .catch(err => res.status(500).send(err));
+        }
         user.save();
         res.setHeader('Bearer',token);
       res.status(201).json(user);
     })
-    .catch(err => res.status(500).json(err));
+    .catch(err => res.status(500).send(err));
 });
 
+
+//---------------------signin------------------------\\
 app.post('/signin',(req,res) => {
   User.findOne({
     where: {
@@ -48,7 +43,7 @@ app.post('/signin',(req,res) => {
     }
   }).then(async user => {
     if(user){
-      isValid = await encrypt.validPassword(req.body.password,user.password);
+      isValid = encrypt.validPassword(req.body.password,user.password);
       if(isValid){
         token = await auth.generateAuthToken(user.id);
         user.token = token;
@@ -58,9 +53,11 @@ app.post('/signin',(req,res) => {
       }
     }
     return res.status(401).json("Usuário e/ou senha inválidos")
-  }).catch(err => res.status(500).json(err));
+  }).catch(err => res.status(500).send(err));
 });
 
+
+//---------------------search------------------------\\
 app.get('/search/:id', (req,res) => {
   
   var token = req.headers['bearer'];
@@ -79,4 +76,4 @@ app.get('/search/:id', (req,res) => {
 });
 
 app.listen(port);
-console.log('starting server...');
+console.log(`starting server on port: ${port}`);
