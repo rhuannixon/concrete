@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const auth = require('./../util/auth');
+const auth = require('../util/auth');
 const encrypt = require('../util/encrypt');
 const { User, Telefone } = require('../models/index');
 
