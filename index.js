@@ -1,17 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const version = require('./package.json')
 const userRouter = require('./app/routes/user');
+const index = require('./app/routes/index');
 
 port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    res.send(`version ${version.version}`);
-});
+app.use('/', index);
 
 app.use('/user', userRouter);
 
