@@ -14,7 +14,6 @@ module.exports = {
       ddd: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        unique: true,
       },
       userId: {
         type: DataTypes.INTEGER,
