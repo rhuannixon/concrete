@@ -61,6 +61,10 @@ router.get('/search/:id', async (req, res, next) => {
                 },
                 include: ['Telefones']
                 });
+        if(!user){
+            res.status(404).send('Usuário não encontrado.')
+        }
+
         res.status(200).send(user);
     }catch(err){
         console.log(err);
