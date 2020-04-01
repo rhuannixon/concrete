@@ -1,15 +1,20 @@
-# concrete
-heroku_url = https://serene-taiga-90757.herokuapp.com
-## Sign up
- - endpoint post(/user/signin) params => (nome,password,email,telefones:numero,ddd)
+# concrete challange
 
-## Sign in
- - endpoint post(/user/signin) params => (password,email)
+### Used technologies
+- Nodejs
+- Express
+- Sequelize
+## Routes
+### Sign up
+ - endpoint post(/signup) params => (nome,password,email,telefones:numero,ddd)
 
-## Buscar usuário
+### Sign in
+ - endpoint post(/signin) params => (password,email)
+
+### Buscar usuário
  - endpoint get(/user/search/:id)
 
-# Comandos Úteis:
+## Comandos Úteis:
 
-## run migrations remotly on production
+### run migrations remotly on production
 - npx sequelize-cli db:migrate --url <database_url>
