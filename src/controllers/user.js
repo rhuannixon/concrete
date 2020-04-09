@@ -1,16 +1,13 @@
-const auth = require('../util/auth');
-const encrypt = require('../util/encrypt');
+const { generateAuthToken } = require('../services/auth');
+const encrypt = require('../services/encrypt');
 const { User, Telefone } = require('../models/index');
 
 const signup = async (req, res) => {
     try {
         const user = await User.create(req.body);
-        token = await auth.generateAuthToken(user.id);
-        user.token = token;
 
         for (var i = 0; i < req.body.telefones.length; i++) {
             var { numero, ddd } = req.body.telefones[i];
-            console.log(`${numero}: ${ddd}`);
             await Telefone.create({
                 "numero": numero,
                 "ddd": ddd,
@@ -18,24 +15,21 @@ const signup = async (req, res) => {
             })
                 .catch(err => console.log(err));
         }
-        user.save();
-        res.setHeader('Authentication', `Bearer ${token}`);
         user.password = undefined;
         return res.status(201).json(user);
     } catch (err) {
-        return res.status(500).send(err);
+        console.log(err.message)
+        return res.status(500).json(err);
     }
 };
 
 const signin = async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ where: { email: req.body.email } });
         if (user) {
             isValid = encrypt.validPassword(req.body.password, user.password);
             if (isValid) {
-                token = await auth.generateAuthToken(user.id);
-                user.token = token;
-                user.save();
+                token = generateAuthToken(user.id);
                 user.password = undefined;
                 res.setHeader('Authentication', `Bearer ${token}`);
                 return res.status(200).json(user);
