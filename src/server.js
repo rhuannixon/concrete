@@ -4,7 +4,7 @@ const app = express();
 const routes = require('./routes');
 const cors = require('cors');
 const helmet = require('helmet');
-const { autheticate } = require("./services/session");
+const { autheticate } = require("./middleware/session");
 autheticate.unless = require("express-unless");
 
 app.use(bodyParser.urlencoded({ extended: false }));
