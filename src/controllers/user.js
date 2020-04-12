@@ -18,7 +18,7 @@ const signup = async (req, res) => {
         user.password = undefined;
         return res.status(201).json(user);
     } catch (err) {
-        console.log(err.message)
+        console.log(err)
         return res.status(500).json(err);
     }
 };
