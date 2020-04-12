@@ -4,17 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require('../../config/database')
+const { props } = require('./../../config');
+const env = props.node_env || 'development';
+const config = require('../database/database')
 const db = {};
-require('dotenv/config');
-
-let sequelize;
-if (process.env.CLEARDB_DATABASE_URL) {
-    sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL);
-} else {
-    sequelize = new Sequelize(config[env]);
-}
+let sequelize = new Sequelize(props.clear_db_url || config[env]);
 
 fs
     .readdirSync(__dirname)
