@@ -8,11 +8,13 @@ const { autheticate } = require("./middleware/session");
 autheticate.unless = require("express-unless");
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+const logger = require("morgan");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(helmet());
+app.use(logger('dev'));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => res.redirect('/docs'));
 app.use(

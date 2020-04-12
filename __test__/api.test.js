@@ -1,33 +1,24 @@
 const request = require('supertest');
-const app = require('../index');
+const app = require('../src/server');
 
-/**
- * Testing get all user endpoint
- */
-describe('POST /users', function() {
+describe('Test for route /users', function () {
     let body = {
         "nome": "string",
-        "email": "string5",
-        "password": "12345"
+        "email": "string6",
+        "password": "12345",
+        "telefones": [{
+            "ddd": "21",
+            "numero": "string"
+        }]
     }
-    it('respond with 201 created', function(done) {
+    it('respond with 201 created', function (done) {
         request(app)
-            .post('/user/signup')
+            .post('/signup')
             .send(body)
-            .set('Accept', 'application/json')
             .expect(201)
             .end((err) => {
                 if (err) return done(err);
                 done();
             });
-    });
-});
-
-describe('GET /users', function() {
-    it('respond with json containing a list of all users', function(done) {
-        request(app)
-            .get('/')
-            .set('Accept', 'application/json')
-            .expect(200, done);
     });
 });

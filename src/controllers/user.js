@@ -18,7 +18,7 @@ const signup = async (req, res) => {
         user.password = undefined;
         return res.status(201).json(user);
     } catch (err) {
-        console.log(err.message)
+        console.log(err)
         return res.status(500).json(err);
     }
 };
@@ -53,7 +53,7 @@ const search = async (req, res) => {
         if (!user) {
             res.status(404).send('Usuário não encontrado.')
         }
-
+        user.password = undefined;
         return res.status(200).send(user);
     } catch (err) {
         console.log(err);
