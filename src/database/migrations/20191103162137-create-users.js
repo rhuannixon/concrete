@@ -24,6 +24,12 @@ module.exports = {
         allowNull: false,
         type: DataTypes.STRING,
       },
+      passwordResetToken: {
+        type: DataTypes.STRING,
+      },
+      passwordResetExpires: {
+        type: 'TIMESTAMP',
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
