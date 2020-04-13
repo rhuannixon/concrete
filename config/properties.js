@@ -1,6 +1,7 @@
 require('dotenv/config');
 
 module.exports = {
+    node_env: process.env.NODE_ENV,
     database: {
         dev: {
             username: process.env.DB_USERNAME,
@@ -18,5 +19,16 @@ module.exports = {
     clear_db_url: process.env.CLEARDB_DATABASE_URL,
     token_secrete: process.env.TOKEN_SECRETE,
     token_expires: process.env.TOKEN_EXPIRES || 3600,
-    node_env: process.env.NODE_ENV
+    passwordResetExpires: process.env.PASSWORD_RESET_EXPIRES || 3600000,
+    mail: {
+        transporter: {
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
+            auth: {
+                user: process.env.MAIL_AUTH_USER,
+                pass: process.env.MAIL_AUTH_PASS
+            }
+        },
+        from: process.env.MAIL_FROM
+    }
 }
