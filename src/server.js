@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const { autheticate } = require("./middleware/session");
 autheticate.unless = require("express-unless");
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('./../config/swagger.json');
 const logger = require("morgan");
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,7 +21,9 @@ app.use(
     autheticate.unless({
         path: [
             { url: "/signin", methods: ["POST"] },
-            { url: "/signup", methods: ["POST"] }
+            { url: "/signup", methods: ["POST"] },
+            { url: "/forgotPassword", methods: ["POST"] },
+            { url: "/changePassword", methods: ["POST"] }
         ]
     })
 );
