@@ -74,6 +74,9 @@
                 },
                 "newPassword": {
                   "type": "string"
+                },
+                "confirmPassword": {
+                  "type": "string"
                 }
               }
             }

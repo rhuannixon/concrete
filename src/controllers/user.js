@@ -87,7 +87,10 @@ const forgotPassword = async (req, res) => {
 
 const changePassword = async (req, res) => {
     try {
-        const { email, code, newPassword } = req.body;
+        const { email, code, newPassword, confirmPassword } = req.body;
+        if (confirmPassword !== newPassword)
+            return res.status(400).json('new passord and confirm password are different');
+
         const user = await User.findOne({ where: { email } })
 
         if (!user) return res.status(400).json("User not found");
